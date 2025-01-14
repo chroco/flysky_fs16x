@@ -12,7 +12,7 @@ project(flysky_fs16x_rc)
 target_sources(app 
 	PRIVATE 
 	#src/test_pwm_loopback.c
-		src/flysky_fs16x_rc.c
+		src/flysky_fs16x.cpp
 		src/blinky.c
-		src/main.c
+		src/main.cpp
 )
