@@ -1,0 +1,83 @@
+/*
+ * Copyright (c) 2021 Espressif Systems (Shanghai) Co., Ltd.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+#include <zephyr/dt-bindings/pwm/pwm.h>
+#include <dt-bindings/pinctrl/esp32-pinctrl.h>
+
+/ {
+	aliases {
+		led0 = &led0;
+		receiver0 = &receiver0;
+		receiver1 = &receiver1;
+		receiver2 = &receiver2;
+		receiver3 = &receiver3;
+	};
+
+	pwm_loopback_0 {
+		compatible = "test-pwm-loopback";
+		/* first index must be a 32-Bit timer */
+		pwms = <&mcpwm0 0 0 PWM_POLARITY_NORMAL>,
+		       <&mcpwm0 6 0 PWM_POLARITY_NORMAL>;
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio0 15 GPIO_ACTIVE_HIGH>;
+			label = "LED 0";
+		};
+	};
+
+	receiver {
+		compatible = "gpio-keys";
+
+		receiver0: receiver_0 {
+			gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>; // pin 36
+      zephyr,code = <INPUT_KEY_0>;
+			label = "Receiver 0";
+		};
+
+		receiver1: receiver_1 {
+			gpios = <&gpio1 3 GPIO_ACTIVE_HIGH>; // pint 35
+      zephyr,code = <INPUT_KEY_1>;
+			label = "Receiver 1";
+		};
+
+		receiver2: receiver_2 {
+			gpios = <&gpio1 2  GPIO_ACTIVE_HIGH>; // pin 34
+      zephyr,code = <INPUT_KEY_2>;
+			label = "Receiver 2";
+		};
+
+		receiver3: receiver_3 {
+			gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>; // pin 39
+      zephyr,code = <INPUT_KEY_3>;
+			label = "Receiver 3";
+		};
+	};
+};
+
+&pinctrl {
+	mcpwm0_default: mcpwm0_default {
+		group1 {
+			pinmux = <MCPWM0_OUT0A_GPIO2>;
+			input-enable;
+		};
+		group2 {
+			pinmux = <MCPWM0_CAP0_GPIO36>;
+			//pinmux = <MCPWM0_CAP0_GPIO2>;
+			output-enable;
+		};
+	};
+};
+
+&mcpwm0 {
+	pinctrl-0 = <&mcpwm0_default>;
+	pinctrl-names = "default";
+	prescale = <255>;
+	prescale-timer0 = <103>;
+	status = "okay";
+};
