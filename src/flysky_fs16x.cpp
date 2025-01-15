@@ -17,6 +17,7 @@ FlySky::FlySky() :
 	pwm_out.flags = PWM_LOOPBACK_OUT_FLAGS;
 
 	startPwm();
+	receiver.startReceiverThread();
 }
 
 FlySky::~FlySky()

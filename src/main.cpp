@@ -17,9 +17,14 @@ int main()
 	FlySky flysky = FlySky();
 
 //*
-	while(1)
+
+	for(uint64_t i = 0;;++i)
 	{
-		flysky.sampleFlysky();
+		if(i % 20 == 0)
+		{
+			printf("\n*%llu*\n", i/20);
+		}
+		//flysky.sampleFlysky();
 		flysky.printPulse();
 		//printf(".");
 
