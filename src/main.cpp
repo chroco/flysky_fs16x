@@ -20,7 +20,7 @@ int main()
 		{
 			printf("\n*%llu*\n", i/20);
 		}
-		//flysky.sampleFlysky();
+		
 		flysky.printPulse();
 		//printf(".");
 
