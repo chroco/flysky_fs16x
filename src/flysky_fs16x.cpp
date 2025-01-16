@@ -10,13 +10,18 @@
 FlySky::FlySky() :
 	receiver(
 		Receiver(GPIO_DT_SPEC_GET_OR(RECEIVER_NODE, gpios, {0}))
-	)
+	),
+	pwm_out{
+		DEVICE_DT_GET(PWM_LOOPBACK_OUT_CTLR),
+		PWM_LOOPBACK_OUT_CHANNEL,
+		PWM_LOOPBACK_OUT_FLAGS
+	}
 {
-	pwm_out.dev = DEVICE_DT_GET(PWM_LOOPBACK_OUT_CTLR);
-	pwm_out.pwm = PWM_LOOPBACK_OUT_CHANNEL;
-	pwm_out.flags = PWM_LOOPBACK_OUT_FLAGS;
-
-	startPwm();
+	//receiver.setFlySky(this); // 0_o
+	
+	//startPwm();
+	
+	receiver.startReceiverThread();
 }
 
 FlySky::~FlySky()
@@ -40,14 +45,11 @@ int FlySky::startPwm(void)
 	return err;
 }
 
-//*
 int FlySky::sampleFlysky(void)
 {
-	receiver.getPulse();
 
 	return 0;
 }
-//*/
 
 void FlySky::printPulse(void)
 {
