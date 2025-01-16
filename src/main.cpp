@@ -18,11 +18,10 @@ int main()
 	{
 		if(i % 20 == 0)
 		{
-			printf("\n*%llu*\n", i/20);
+			printf("\n*%llu*", i/20);
 		}
-		//flysky.sampleFlysky();
+		
 		flysky.printPulse();
-		//printf(".");
 
 		k_msleep(50);
 	}

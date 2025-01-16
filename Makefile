@@ -18,6 +18,7 @@ all: clean
 
 write: erase
 	@west flash --runner esp32 
+	@picocom -b 115200 /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
 
 blinky:
 	@west build -b $(BOARD)  --sysbuild $(ZEPHYR_BASE)/samples/basic/rgb_led
