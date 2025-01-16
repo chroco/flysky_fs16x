@@ -13,7 +13,7 @@ target_sources(app
 	PRIVATE 
 	#src/test_pwm_loopback.c
 		src/blinky.c
-		src/receiver.cpp
+		#src/receiver.cpp
 		src/flysky_fs16x.cpp
 		src/main.cpp
 )
