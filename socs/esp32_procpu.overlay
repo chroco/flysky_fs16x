@@ -35,7 +35,7 @@
 		compatible = "gpio-keys";
 
 		receiver0: receiver_0 {
-			gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>; // pin 36
+			gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>; // pin 39
       zephyr,code = <INPUT_KEY_0>;
 			label = "Receiver 0";
 		};
@@ -53,7 +53,7 @@
 		};
 
 		receiver3: receiver_3 {
-			gpios = <&gpio1 7 GPIO_ACTIVE_HIGH>; // pin 39
+			gpios = <&gpio1 4 GPIO_ACTIVE_HIGH>; // pin 36
       zephyr,code = <INPUT_KEY_3>;
 			label = "Receiver 3";
 		};

@@ -6,11 +6,14 @@
 #include <zephyr/drivers/pwm.h>
 #include <zephyr/timing/timing.h>
 
-#define RECEIVER_NODE	DT_ALIAS(receiver0)
-#define LED0_NODE DT_ALIAS(led0)
+#define THROTTLE_NODE			DT_ALIAS(receiver0)
+#define ROLL_NODE					DT_ALIAS(receiver1)
+#define PITCH_NODE				DT_ALIAS(receiver2)
+#define YAW_NODE					DT_ALIAS(receiver3)
+#define LED0_NODE					DT_ALIAS(led0)
 
-#define RECEIVER_STACK_SIZE 500
-#define RECEIVER_PRIORITY 5
+#define FLYSKY_STACK_SIZE		500
+#define FLYSKY_PRIORITY			5
 
 struct pwm_t {
 	const device *dev;
@@ -23,10 +26,8 @@ struct pwm_t {
 class Receiver
 {
 	public:
-		Receiver(const gpio_dt_spec);
 		Receiver(
 			const gpio_dt_spec, 
-			gpio_callback *, 
 			void (*)(const device *, gpio_callback *, uint32_t)
 		);
 		~Receiver();
@@ -35,22 +36,23 @@ class Receiver
 
 		void printPulse(void);
 		const gpio_dt_spec *getReceiver(void);
-		//static void receiver_entry(void *, void *, void *);
-		//int startReceiverThread(void);
-	private:
-		//FlySky *pFlySky;
-		k_mutex time_mutex;
-		static uint64_t pulse_time_us;
+		void setPulseTimeIsr(uint64_t);
 		uint64_t getPulseTime(void);
-		void setPulseTime(uint64_t);
-		
+		int handleIsr(void);
+	private:
 		const gpio_dt_spec receiver;
-		static gpio_callback receiver_data;
-		gpio_callback *preceiver_data;
-		static void receiver_isr(const device *, gpio_callback *cb, uint32_t);
-		void (*preceiver_isr)(const device *, gpio_callback *cb, uint32_t);
+		void (*receiver_isr)(const device *, gpio_callback *, uint32_t);
+		gpio_callback receiver_data;
+		uint64_t pulse_time_us;
 
-		//static int work(void);
+		timing_t start_time;
+		timing_t stop_time;
+		uint64_t total_cycles;
+		uint64_t total_ns;
+
+
+		k_mutex time_mutex;
+		//FlySky *pFlySky;
 };
 
 class FlySky {
@@ -60,8 +62,22 @@ class FlySky {
 
 		int sampleFlysky(void);
 		void printPulse(void);
+		
+		static void flysky_entry(void *, void *, void *);
+		int startFlySkyThread(void);
+		Receiver *getThrottle(void);
+		Receiver *getRoll(void);
+		Receiver *getPitch(void);
+		Receiver *getYaw(void);
 	private:
-		Receiver receiver;
+		static void throttle_isr(const struct device *, struct gpio_callback *, uint32_t);
+		static void roll_isr(const struct device *, struct gpio_callback *, uint32_t);
+		static void pitch_isr(const struct device *, struct gpio_callback *, uint32_t);
+		static void yaw_isr(const struct device *, struct gpio_callback *, uint32_t);
+		Receiver throttle;
+		Receiver roll;
+		Receiver pitch;
+		Receiver yaw;
 };
 
 #endif
