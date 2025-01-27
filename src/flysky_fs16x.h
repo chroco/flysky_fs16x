@@ -6,12 +6,12 @@
 #include <zephyr/drivers/pwm.h>
 #include <zephyr/timing/timing.h>
 
-#define THROTTLE_NODE			DT_ALIAS(receiver0)
-#define ROLL_NODE					DT_ALIAS(receiver1)
-#define PITCH_NODE				DT_ALIAS(receiver2)
-#define YAW_NODE					DT_ALIAS(receiver3)
-#define VRA_NODE					DT_ALIAS(receiver4)
-#define VRB_NODE					DT_ALIAS(receiver5)
+#define PITCH_NODE				DT_ALIAS(receiver0)
+#define THROTTLE_NODE			DT_ALIAS(receiver1) 
+#define YAW_NODE					DT_ALIAS(receiver2)
+#define VRA_NODE					DT_ALIAS(receiver3)  
+#define VRB_NODE					DT_ALIAS(receiver4)
+#define ROLL_NODE					DT_ALIAS(receiver5)
 #define LED0_NODE					DT_ALIAS(led0)
 
 typedef void receiver_isr_t(const struct device *, struct gpio_callback *, uint32_t);
@@ -45,7 +45,7 @@ class Receiver
 
 struct flysky_data_t
 {
-uint64_t throttle_pulse_time_us;
+	uint64_t throttle_pulse_time_us;
 	uint64_t roll_pulse_time_us;
 	uint64_t pitch_pulse_time_us;
 	uint64_t yaw_pulse_time_us;

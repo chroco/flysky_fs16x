@@ -1,0 +1,173 @@
+/ {
+	aliases {
+		receiver0 = &receiver0;
+		receiver1 = &receiver1;
+		receiver2 = &receiver2;
+		receiver3 = &receiver3;
+		receiver4 = &receiver4;
+		receiver5 = &receiver5;
+//		gnss = &gnss;
+	};
+
+	chosen {
+		zephyr,console = &cdc_acm_uart0;
+	};
+
+	receiver {
+		compatible = "gpio-keys";
+
+		receiver0: receiver_0 {
+			gpios = <&gpio4 4 GPIO_ACTIVE_HIGH>; // pin 2
+			label = "Receiver 0";
+		};
+
+		receiver1: receiver_1 {
+			gpios = <&gpio4 5 GPIO_ACTIVE_HIGH>; // pin 3
+			label = "Receiver 1";
+		};
+
+		receiver2: receiver_2 {
+			gpios = <&gpio4 6 GPIO_ACTIVE_HIGH>; // pin 4
+			label = "Receiver 2";
+		};
+
+		receiver3: receiver_3 {
+			gpios = <&gpio4 8 GPIO_ACTIVE_HIGH>; // pin 5
+			label = "Receiver 3";
+		};
+
+		receiver4: receiver_4 {
+			gpios = <&gpio2 10 GPIO_ACTIVE_HIGH>; // pin 6
+			label = "Receiver 4";
+		};
+
+		/delete-node/ pinmux_lpuart2;
+		receiver5: receiver_5 {
+			gpios = <&gpio2 17 GPIO_ACTIVE_HIGH>; // pin 7
+			label = "Receiver 5";
+		};
+	};
+
+	servos {
+		servo0: servo_0 {
+			compatible = "pwm-servo";
+			pwms = <&flexpwm2_pwm3 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			min-pulse = <PWM_USEC(700)>;
+			max-pulse = <PWM_USEC(9000)>;
+		};
+
+		servo1: servo_1 {
+			compatible = "pwm-servo";
+			pwms = <&flexpwm2_pwm3 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			min-pulse = <PWM_USEC(700)>;
+			max-pulse = <PWM_USEC(9000)>;
+		};
+
+		servo2: servo_2 {
+			compatible = "pwm-servo";
+			pwms = <&flexpwm3_pwm1 1 PWM_MSEC(20) PWM_POLARITY_NORMAL>; 
+			min-pulse = <PWM_USEC(700)>;
+			max-pulse = <PWM_USEC(9000)>;
+		};
+
+		servo3: servo_3 {
+			compatible = "pwm-servo";
+			pwms = <&flexpwm3_pwm1 0 PWM_MSEC(20) PWM_POLARITY_NORMAL>;
+			min-pulse = <PWM_USEC(700)>;
+			max-pulse = <PWM_USEC(9000)>;
+		};
+	};
+};
+
+&zephyr_udc0 {
+	cdc_acm_uart0: cdc_acm_uart0 {
+		compatible = "zephyr,cdc-acm-uart";
+	};
+};
+
+&pinctrl {
+	pinmux_flexpwm3_ch1: pinmux_flexpwm3_ch1 {
+		group0 {
+			pinmux = <&iomuxc_gpio_emc_32_flexpwm3_pwmb1>, 
+							 <&iomuxc_gpio_emc_31_flexpwm3_pwma1>;
+			drive-strength = "r0-7";
+			slew-rate = "fast";
+			nxp,speed = "200-mhz";
+		};
+	};
+	pinmux_flexpwm2_ch3: pinmux_flexpwm2_ch3 {
+		group0 {
+			pinmux = <&iomuxc_gpio_b1_02_flexpwm2_pwma3>,
+							 <&iomuxc_gpio_b1_03_flexpwm2_pwmb3>;
+			drive-strength = "r0-7";
+			slew-rate = "fast";
+			nxp,speed = "200-mhz";
+		};
+	};
+};
+
+&flexpwm2_pwm3 {
+	status = "okay";
+	pinctrl-0 = <&pinmux_flexpwm2_ch3>;
+	pinctrl-names = "default";
+	nxp,prescaler = <64>;
+};
+
+&flexpwm3_pwm1 {
+	status = "okay";
+	pinctrl-0 = <&pinmux_flexpwm3_ch1>;
+	pinctrl-names = "default";
+	nxp,prescaler = <64>;
+};
+
+/*
+&lpuart8 {
+  status = "okay";
+  current-speed = <115200>;
+  pinctrl-0 = <&pinmux_lpuart8>;
+  pinctrl-1 = <&pinmux_lpuart8_sleep>;
+  pinctrl-names = "default", "sleep";
+
+  gnss: u_blox_m10 {
+    status = "okay";
+    compatible = "u-blox,m8";
+    uart-baudrate = <115200>;
+  };
+};
+
+&lpuart8 {
+	status = "okay";
+	current-speed = <115200>;
+
+	gnss: u-blox,m8 {
+		status = "okay";
+		compatible = "u-blox,m8";
+		uart-baudrate = <115200>;
+	};
+};
+//*/
+
+&lpi2c1 {
+	status = "okay";
+	mpu6050@68 {
+		compatible = "invensense,mpu6050";
+		reg = <0x68>;
+		status = "okay";
+		int-gpios = <&gpio1 22 GPIO_ACTIVE_HIGH>;
+	};
+	
+	bmp390@77 {
+		compatible = "bosch,bmp390";
+		reg = <0x77>;
+		status = "okay";
+		int-gpios = <&gpio1 23 GPIO_ACTIVE_HIGH>;
+		odr = "200";
+		osr-press = <1>;
+		osr-temp = <1>;
+		iir-filter = <3>;
+
+		label = "BMP390";
+	};
+};
+
+

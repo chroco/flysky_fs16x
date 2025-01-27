@@ -172,11 +172,11 @@ void FlySky::printPulses(void)
 
 void FlySky::printPulses(flysky_data_t *pflysky_data)
 {
-	printf("\n(%4llu)(%4llu)(%4llu)(%4llu)(%4llu)(%4llu)", 
+	printf("\n(T: %4llu)(Y: %4llu)(P: %4llu)(R: %4llu)(A: %4llu)(B: %4llu)", 
 		pflysky_data->throttle_pulse_time_us, 
-		pflysky_data->roll_pulse_time_us,
-		pflysky_data->pitch_pulse_time_us,
 		pflysky_data->yaw_pulse_time_us,
+		pflysky_data->pitch_pulse_time_us,
+		pflysky_data->roll_pulse_time_us,
 		pflysky_data->vra_pulse_time_us,
 		pflysky_data->vrb_pulse_time_us
 	);

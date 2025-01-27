@@ -8,8 +8,16 @@
 #include "blinky.h"
 #include "flysky_fs16x.h"
 
+#ifdef CONFIG_TEENSY41
+#include "console.h"
+#endif
+
 int main()
 {
+#ifdef CONFIG_TEENSY41
+	startConsole();
+#endif
+
 	printf("flysky\n");
 	
 	FlySky flysky = FlySky();

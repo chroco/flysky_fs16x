@@ -1,4 +1,5 @@
 BOARD= esp32_devkitc_wroom/esp32/procpu
+#BOARD= teensy41 
 OPTIONS= -p always 
 BUILD_DIR= build/
 ESPTOOL= /home/chroco/zephyr/zephyr-workspace/modules/hal/espressif/tools/esptool_py/esptool.py
@@ -11,19 +12,15 @@ OVERLAY= esp32_devkitc_wroom_procpu.overlay
 BIN= /home/chroco/zephyr/blinky/build/mcuboot/zephyr/zephyr.bin
 ARGS= --port $(PORT) --chip auto --baud $(BAUD) --before default_reset --after hard_reset write_flash $(FORCE) -u --flash_mode $(MODE) --flash_freq 40m --flash_size detect 0x0000
 
-.PHONY: all write mcuboot clean
+.PHONY: all write clean
 
 all: clean
-	@west build -b $(BOARD) --sysbuild .
+	@west build $(OPTIONS) -b $(BOARD) . #--sysbuild .
 
-write: erase
-	@west flash --runner esp32 
-	@picocom -b 115200 /dev/serial/by-id/usb-Silicon_Labs_CP2102_USB_to_UART_Bridge_Controller_0001-if00-port0
+write:
+	@west flash
 
-blinky:
-	@west build -b $(BOARD)  --sysbuild $(ZEPHYR_BASE)/samples/basic/rgb_led
-
-erase:
+esp32_erase:
 	$(ESPTOOL) erase_flash
 
 clean:
