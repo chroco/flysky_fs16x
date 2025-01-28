@@ -139,7 +139,32 @@ FlySky::FlySky() :
 			GPIO_DT_SPEC_GET_OR(VRB_NODE, gpios, {0}),
 			&FlySky::vrb_isr
 		)
+	) /*,
+	r6(
+		Receiver(
+			GPIO_DT_SPEC_GET_OR(R6_NODE, gpios, {0}),
+			&FlySky::r6_isr
+		)
+	),
+	r7(
+		Receiver(
+			GPIO_DT_SPEC_GET_OR(R7_NODE, gpios, {0}),
+			&FlySky::r7_isr
+		)
+	),
+	r8(
+		Receiver(
+			GPIO_DT_SPEC_GET_OR(R8_NODE, gpios, {0}),
+			&FlySky::r8_isr
+		)
+	),
+	r9(
+		Receiver(
+			GPIO_DT_SPEC_GET_OR(R9_NODE, gpios, {0}),
+			&FlySky::r9_isr
+		)
 	)
+//*/
 {
 	pThis = this; 
 
@@ -160,6 +185,12 @@ void FlySky::capturePulses(flysky_data_t *pflysky_data)
 	pflysky_data->yaw_pulse_time_us = yaw.getPulseTime();
 	pflysky_data->vra_pulse_time_us = vra.getPulseTime();
 	pflysky_data->vrb_pulse_time_us = vrb.getPulseTime();
+/*
+	pflysky_data->r6_pulse_time_us = r6.getPulseTime();
+	pflysky_data->r7_pulse_time_us = r7.getPulseTime();
+	pflysky_data->r8_pulse_time_us = r8.getPulseTime();
+	pflysky_data->r9_pulse_time_us = r9.getPulseTime();
+//*/
 	k_mutex_unlock(&flysky_mutex);
 }
 
@@ -172,13 +203,19 @@ void FlySky::printPulses(void)
 
 void FlySky::printPulses(flysky_data_t *pflysky_data)
 {
-	printf("\n(T: %4llu)(Y: %4llu)(P: %4llu)(R: %4llu)(A: %4llu)(B: %4llu)", 
+	printf(
+		"\n(T: %4llu)(Y: %4llu)(P: %4llu)(R: %4llu)(A: %4llu)(B: %4llu)", //(0: %4llu)", // (0: %4llu)(0: %4llu)(0: %4llu)", 
 		pflysky_data->throttle_pulse_time_us, 
 		pflysky_data->yaw_pulse_time_us,
 		pflysky_data->pitch_pulse_time_us,
 		pflysky_data->roll_pulse_time_us,
 		pflysky_data->vra_pulse_time_us,
-		pflysky_data->vrb_pulse_time_us
+		pflysky_data->vrb_pulse_time_us/*,
+		pflysky_data->r6_pulse_time_us,
+		pflysky_data->r7_pulse_time_us,
+		pflysky_data->r8_pulse_time_us,
+		pflysky_data->r9_pulse_time_us
+//*/
 	);
 }
 
@@ -212,6 +249,28 @@ Receiver *FlySky::getVrB(void)
 	return &vrb;
 }
 
+/*
+Receiver *FlySky::getR6(void)
+{
+	return &r6;
+}
+
+Receiver *FlySky::getR7(void)
+{
+	return &r7;
+}
+
+Receiver *FlySky::getR8(void)
+{
+	return &r8;
+}
+
+Receiver *FlySky::getR9(void)
+{
+	return &r9;
+}
+//*/
+
 void FlySky::throttle_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
 {
 	pThis->getThrottle()->handleIsr();
@@ -242,4 +301,24 @@ void FlySky::vrb_isr(const struct device *dev, struct gpio_callback *cb, uint32_
 	pThis->getVrB()->handleIsr();
 }
 
+/*
+void FlySky::r6_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+	pThis->getR6()->handleIsr();
+}
 
+void FlySky::r7_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+	pThis->getR7()->handleIsr();
+}
+
+void FlySky::r8_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+	pThis->getR8()->handleIsr();
+}
+
+void FlySky::r9_isr(const struct device *dev, struct gpio_callback *cb, uint32_t pins)
+{
+	pThis->getR9()->handleIsr();
+}
+//*/

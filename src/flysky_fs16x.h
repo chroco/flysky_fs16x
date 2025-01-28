@@ -6,12 +6,18 @@
 #include <zephyr/drivers/pwm.h>
 #include <zephyr/timing/timing.h>
 
-#define PITCH_NODE				DT_ALIAS(receiver0)
-#define THROTTLE_NODE			DT_ALIAS(receiver1) 
-#define YAW_NODE					DT_ALIAS(receiver2)
-#define VRA_NODE					DT_ALIAS(receiver3)  
-#define VRB_NODE					DT_ALIAS(receiver4)
-#define ROLL_NODE					DT_ALIAS(receiver5)
+#define ROLL_NODE					DT_ALIAS(receiver0)
+#define PITCH_NODE				DT_ALIAS(receiver1) 
+#define THROTTLE_NODE			DT_ALIAS(receiver2)
+#define YAW_NODE					DT_ALIAS(receiver3)  
+#define VRA_NODE					DT_ALIAS(receiver4)
+#define VRB_NODE					DT_ALIAS(receiver5)
+/*
+#define R6_NODE						DT_ALIAS(receiver6)
+#define R7_NODE						DT_ALIAS(receiver7)
+#define R8_NODE						DT_ALIAS(receiver8)
+#define R9_NODE						DT_ALIAS(receiver9)
+//*/
 #define LED0_NODE					DT_ALIAS(led0)
 
 typedef void receiver_isr_t(const struct device *, struct gpio_callback *, uint32_t);
@@ -51,6 +57,12 @@ struct flysky_data_t
 	uint64_t yaw_pulse_time_us;
 	uint64_t vra_pulse_time_us;
 	uint64_t vrb_pulse_time_us;
+/*
+	uint64_t r6_pulse_time_us;
+	uint64_t r7_pulse_time_us;
+	uint64_t r8_pulse_time_us;
+	uint64_t r9_pulse_time_us;
+//*/
 };
 
 class FlySky {
@@ -68,6 +80,12 @@ class FlySky {
 		Receiver *getYaw(void);
 		Receiver *getVrA(void);
 		Receiver *getVrB(void);
+/*
+		Receiver *getR6(void);
+		Receiver *getR7(void);
+		Receiver *getR8(void);
+		Receiver *getR9(void);
+//*/
 	private:
 		Receiver throttle;
 		Receiver roll;
@@ -75,6 +93,12 @@ class FlySky {
 		Receiver yaw;
 		Receiver vra;
 		Receiver vrb;
+/*
+		Receiver r6;
+		Receiver r7;
+		Receiver r8;
+		Receiver r9;
+//*/
 
 		static FlySky *pThis;
 		static flysky_data_t flysky_data;
@@ -84,6 +108,12 @@ class FlySky {
 		static receiver_isr_t yaw_isr;
 		static receiver_isr_t vra_isr;
 		static receiver_isr_t vrb_isr;
+/*
+		static receiver_isr_t r6_isr;
+		static receiver_isr_t r7_isr;
+		static receiver_isr_t r8_isr;
+		static receiver_isr_t r9_isr;
+//*/
 		
 		k_mutex flysky_mutex;
 };

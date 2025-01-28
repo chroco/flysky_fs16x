@@ -6,15 +6,22 @@
 		receiver3 = &receiver3;
 		receiver4 = &receiver4;
 		receiver5 = &receiver5;
+/*
+		receiver6 = &receiver6;
+		receiver7 = &receiver7;
+		receiver8 = &receiver8;
+		receiver9 = &receiver9;
+//*/
 //		gnss = &gnss;
 	};
 
 	chosen {
 		zephyr,console = &cdc_acm_uart0;
 	};
-
+	
 	receiver {
 		compatible = "gpio-keys";
+		
 
 		receiver0: receiver_0 {
 			gpios = <&gpio4 4 GPIO_ACTIVE_HIGH>; // pin 2
@@ -41,11 +48,33 @@
 			label = "Receiver 4";
 		};
 
-		/delete-node/ pinmux_lpuart2;
 		receiver5: receiver_5 {
 			gpios = <&gpio2 17 GPIO_ACTIVE_HIGH>; // pin 7
 			label = "Receiver 5";
 		};
+
+/*
+		receiver6: receiver_6 {
+		/delete-node/ lpuart4;
+			gpios = <&gpio2 16 GPIO_ACTIVE_HIGH>; // pin 8
+			label = "Receiver 6";
+		};
+
+		receiver7: receiver_7 {
+			gpios = <&gpio2 11 GPIO_ACTIVE_HIGH>; // pin 9
+			label = "Receiver 7";
+		};
+		
+		receiver8: receiver_8 {
+			gpios = <&gpio2 0 GPIO_ACTIVE_HIGH>; // pin 10
+			label = "Receiver 8";
+		};
+		
+		receiver9: receiver_9 {
+			gpios = <&gpio2 2 GPIO_ACTIVE_HIGH>; // pin 11
+			label = "Receiver 9";
+		};
+//*/
 	};
 
 	servos {
